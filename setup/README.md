@@ -34,22 +34,25 @@ Log out and log back in to be effective.
 	$ sudo apt upgrade -y
 
 ### Disable startup scripts
-	$ sudo systemctl stop magni-base
+	$ sudo systemctl stop magni-base.service
 	$ sudo systemctl stop roscore.service
-	$ sudo systemctl disable magni-base
+	$ sudo systemctl disable magni-base.service
 	$ sudo systemctl disable roscore.service
 
-### Change HOSTNAME (optional)
+### (Optional !) Change HOSTNAME
 	$ hostname
 	$ vi /etc/hostname
-	$ sudo chmod a+rw /etc/hosts
+	$ sudo chmod +w /etc/hosts
 	$ vi /etc/hosts
 Will be effective after reboot.
 
-### Install tmux
+### (Optional !) Install tmux & VNC server
 	$ sudo apt install tmux
-
-### Install VNC server
 	$ sudo apt install xfce4 xfce4-goodies tightvncserver -y
-	
 Reboot.
+
+## Setup the workspace
+	$ git clone https://github.com/gsivaych/asimov
+	$ cd asimov/
+	$ catkin_make
+Ha!
