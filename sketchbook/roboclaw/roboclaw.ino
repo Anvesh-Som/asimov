@@ -13,10 +13,10 @@ RoboClaw roboclaw(&Serial1, timeout);
 #define address 0x80
 #define baudRate 38400
 
-float Kp1 = 3.7123, Ki1 = 0.3608, Kd1 = 0.6457;
-float Kp2 = 3.7123, Ki2 = 0.3608, Kd2 = 0.6457;
-uint32_t qpps1 = 6000, qpps2 = 6000;
-uint32_t accel;
+float Kp1 = 8355.01, Ki1 = 839.49, Kd1 = 0.00;
+float Kp2 = 8600.91, Ki2 = 869.77, Kd2 = 0.00;
+uint32_t qpps1 = 6780, qpps2 = 6620;
+uint32_t accel = 1000;
 
 #define baudRate_ROSserial 38400
 
@@ -30,12 +30,14 @@ ros::NodeHandle nh;
 #define encM2_rostopic "/left_wheel/enc"
 #define speedM1_rostopic "/right_wheel/vel"
 #define speedM2_rostopic "/left_wheel/vel"
+#define encSpeedStatus_rostopic "roboclaw/enc_vel/status_flags"
+
 #define currentM1_rostopic "/right_motor/current"
 #define currentM2_rostopic "/left_motor/current"
+
 #define error_rostopic "/roboclaw/error_status"
 #define voltage_rostopic "/roboclaw/measured_voltage"
 #define temperature_rostopic "/roboclaw/measured_temperature"
-#define encSpeedStatus_rostopic "roboclaw/enc_vel/status_flags"
 
 
 void cb_accel(const std_msgs::UInt32& msg){
@@ -129,6 +131,7 @@ void loop(){
 		error.data = err;
 		_error.publish(&error);
 	}
+  else{
 
 	nh.spinOnce();
 
@@ -169,15 +172,17 @@ void loop(){
 	currentM1.data = currentM1_; currentM2.data = currentM2_;
 	_currentM1.publish(&currentM1); _currentM2.publish(&currentM2);
 
-	uint16_t temp_;
-	roboclaw.ReadTemp(address, temp_);
-	temperature.data = temp_;
-	_temperature.publish(&temperature);
-
 	bool validVoltage;
 	uint16_t voltage_ = roboclaw.ReadMainBatteryVoltage(address, &validVoltage);
 	if(validVoltage){
 		voltage.data = voltage_;
 		_voltage.publish(&voltage);
 	}
+
+  uint16_t temp_;
+  roboclaw.ReadTemp(address, temp_);
+  temperature.data = temp_;
+  _temperature.publish(&temperature);
+
+  }
 }

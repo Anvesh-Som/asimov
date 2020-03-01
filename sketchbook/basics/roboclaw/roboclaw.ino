@@ -24,12 +24,18 @@ void setup(){
     delay(500);
 	} else{
 		Serial.println("Not OK! Couldn't fetch version.");
+    while(true){
+      // await reset
+    }
 	}
 
   bool validError;
   uint32_t error = roboclaw.ReadError(address, &validError);
   if(validError){
     Serial.print("Error State : "); Serial.println(error);
+    while(true){
+      // await reset
+    }
   } else{
     // RoboClaw Setup
     roboclaw.SetM1VelocityPID(address, Kp1, Ki1, Kd1, qpps1);
@@ -78,6 +84,9 @@ void displayStatus(){
   uint32_t error = roboclaw.ReadError(address, &validError);
   if(validError){
     Serial.print("Error State : "); Serial.println(error);
+    while(true){
+      //await reset
+    }
   } else{
     Serial.println("Error : None.");
   }
@@ -144,6 +153,6 @@ void loop(){
   displayStatus();
   
   while(true){
-    // wait till reset
+    // await reset
   }
 }
